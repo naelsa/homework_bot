@@ -88,7 +88,7 @@ def parse_status(homework: dict):
     if homework_status not in HOMEWORK_VERDICTS:
         message = f'Неизвестный статус домашней работы: {homework_status}'
         raise ValueError(message)
-    return (f'Изменился статус проверки работы {homework_name}.'
+    return (f'Изменился статус проверки работы "{homework_name}".'
             f'{HOMEWORK_VERDICTS[homework_status]}')
 
 
@@ -145,4 +145,4 @@ if __name__ == '__main__':
         ),
             logging.StreamHandler(sys.stdout)]
     )
-main()
+    main()
