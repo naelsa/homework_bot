@@ -47,7 +47,7 @@ def get_api_answer(current_timestamp):
     param = dict(
         url=ENDPOINT,
         headers=HEADERS,
-        params={'from_date': 0}
+        params={'from_date': timestamp}
     )
     message = 'Начал запрос к {url} с параметрами {headers} и {params}'
     logging.info(message.format(**param))
@@ -86,7 +86,6 @@ def parse_status(homework: dict):
     """Парсит ответ API по ключам homework_name и status."""
     homework_name = homework.get('homework_name')
     homework_status = homework.get('status')
-    homework_comment = homework.get('reviewer_comment')
     if 'homework_name' not in homework:
         message = f'Неизвестное имя домашней работы: {homework_name}'
         raise KeyError(message)
@@ -94,8 +93,7 @@ def parse_status(homework: dict):
         message = f'Неизвестный статус домашней работы: {homework_status}'
         raise ValueError(message)
     return (f'Изменился статус проверки работы "{homework_name}".'
-            f'{HOMEWORK_VERDICTS[homework_status]}'
-            f'Самый лучший ревьювер оставил комментарий: {homework_comment}')
+            f'{HOMEWORK_VERDICTS[homework_status]}')
 
 
 def check_tokens():
