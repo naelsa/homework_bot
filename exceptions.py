@@ -1,4 +1,9 @@
-class EmptyAPIAnswer(Exception):
+class NotForwardingException(Exception):
+    """Исключение не для пересылки."""
+    pass
+
+
+class EmptyAPIAnswer(NotForwardingException):
     """Кастомное исключение при пустом ответе API."""
 
     pass
@@ -10,7 +15,7 @@ class APIAnswerError(Exception):
     pass
 
 
-class SendMessageException(Exception):
+class SendMessageException(NotForwardingException):
     """Кастомное исключение при ошибке отправки сообщения."""
 
     pass
