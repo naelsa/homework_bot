@@ -62,8 +62,10 @@ def get_api_answer(current_timestamp):
     except Exception as error:
         message = ('{url}'
                    'параметрами {headers} и {params}'
-                   'ведет себя незапланированно')
-        raise exceptions.ConnectionError(message.format(**param)) from error
+                   f'ведет себя незапланированно: {error}')
+        raise exceptions.ConnectionError(
+            message.format(**param, error=error)
+        ) from error
 
 
 def check_response(response: dict) -> list:
@@ -112,14 +114,9 @@ def main():
     current_timestamp = int(time.time())
     current_report = {
         'name': '',
-        'message': '',
-        'comment': ''
+        'message': ''
     }
-    prev_report = {
-        'name': '',
-        'message': '',
-        'comment': ''
-    }
+    prev_report = current_report.copy()
 
     while True:
         try:
@@ -130,16 +127,15 @@ def main():
                 homework = homeworks[0]
                 current_report['name'] = homework['homework_name']
                 current_report['message'] = parse_status(homework)
-                current_report['comment'] = homework['reviewer_comment']
             else:
                 current_report['message'] = 'Работа не нашлась!'
             if current_report != prev_report:
-                send_message(bot, current_report.get('message', 'comment'))
+                send_message(bot, current_report.get('message'))
                 prev_report = current_report.copy()
             else:
                 message = 'Стаутс работы не изменился.'
                 logging.debug(message)
-                raise exceptions.NotForwardingException(message)
+                exceptions.NotForwardingException(message)
         except Exception as error:
             error_message = f'Произошла ошибка! :{error}'
             current_report['message'] = error_message
